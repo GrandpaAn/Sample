@@ -11,7 +11,7 @@
 {% endautoescape %} -->
 {{ title|safe }}
 {{ body|md|safe }}
-{{ read_md('test.md')}}
+{{ read_md('test.md')|md|safe}}
 <nav>
 	<a href="{{ url_for('.serivce') }}">Serivce</a>
 	<a href="{{ url_for('.about') }}">About</a>
