@@ -6,11 +6,17 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}">
 </head>
 <body>
-	<h1>{{ title }}</h1>
+<!-- {% autoescape false %}
+	{{ title }}
+{% endautoescape %} -->
+{{ title|safe }}
+{{ body|md|safe }}
+{{ read_md('test.md')}}
 <nav>
 	<a href="{{ url_for('.serivce') }}">Serivce</a>
 	<a href="{{ url_for('.about') }}">About</a>
 	<a href="{{ url_for('.projects') }}">projects</a>
 </nav>
+
 </body>
 </html>

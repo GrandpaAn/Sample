@@ -4,7 +4,7 @@ from werkzeug.routing import BaseConverter
 from werkzeug.utils import secure_filename
 from flask.ext.script import Manager
 from os import path
-
+from livereload import Server
 
 class RegexConverter(object):
 	"""docstring for RegexConverter"""
@@ -19,7 +19,7 @@ manager = Manager(app)
 
 @app.route('/')
 def index():
-	response = make_response(render_template('index.html', title='Welcome'))
+	response = make_response(render_template('index.html', title='<h1>Welcome</h1>', body='# Header1'))
 	response.set_cookie('username', '')
 	return response
 
@@ -63,13 +63,30 @@ def upload():
 def page_not_found(error):
 	return render_template('404.html')
 
-@manager.command 
-def dev():
-	from livereload import Server
+# @manager.command 
+# def dev():
+	
+	# live_server = Server(app.wsgi_app)
+	# live_server.watch('**/*.*')
+	# live_server.serve(open_url=True)
+
+@app.template_filter('md')
+def markdown_to_html(txt):
+	from markdown import markdown
+	return markdown(txt)
+
+def read_md(filename):
+	with open(filename) as md_file:
+		content = reduce(lambda x, y: x + y, md_file.readlines())
+		return content.decode('utf-8')
+
+@app.context_processor
+def inject_methods():
+	return dict(read_md = read_md)
+
+if __name__ == '__main__':
+	# app.run(debug=True)
+	# manager.run()
 	live_server = Server(app.wsgi_app)
 	live_server.watch('**/*.*')
 	live_server.serve(open_url=True)
-
-if __name__ == '__main__':
-	# app.run(debug=True)\
-	manager.run()
