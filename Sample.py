@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response, abort
 from werkzeug.routing import BaseConverter
 from werkzeug.utils import secure_filename
+from flask.ext.script import Manager
 from os import path
 
 
@@ -13,6 +14,8 @@ class RegexConverter(object):
 
 app = Flask(__name__)
 app.url_map.converters['regex'] = RegexConverter
+
+manager = Manager(app)
 
 @app.route('/')
 def index():
@@ -59,6 +62,14 @@ def upload():
 @app.errorhandler(404)
 def page_not_found(error):
 	return render_template('404.html')
- 
+
+@manager.command 
+def dev():
+	from livereload import Server
+	live_server = Server(app.wsgi_app)
+	live_server.watch('**/*.*')
+	live_server.serve(open_url=True)
+
 if __name__ == '__main__':
-	app.run(debug=True)
+	# app.run(debug=True)\
+	manager.run()
