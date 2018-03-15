@@ -2,10 +2,9 @@
 from flask import Flask, render_template, request
 from werkzeug.routing import BaseConverter
 
-class RegexConverter(object):
-	"""docstring for RegexConverter"""
+class RegexConverter(BaseConverter):
 	def __init__(self, url_map, *items):
-		super(RegexConverter,self).__init__()
+		super(RegexConverter,self).__init__(url_map)
 		self.regex=items[0]
 
 app = Flask(__name__)
@@ -23,9 +22,9 @@ def serivce():
 def about():
 	return 'About'
 #路由
-# @app.route('/user/<regex("[a-z]{3}"):user_id>')
-# def user(user_id):
-# 	return 'User ID %s' % user_id
+@app.route('/user/<regex("[a-z]{3}"):user_id>')
+def user(user_id):
+	return 'User ID %s' % user_id
 
 @app.route('/projects/')
 @app.route('/project-page/')
