@@ -19,7 +19,7 @@ manager = Manager(app)
 
 @app.route('/')
 def index():
-	response = make_response(render_template('index.html', title='<h1>Welcome</h1>', body='# Header1'))
+	response = make_response(render_template('index.html', title="Welcome to Grandpaan's Home", body='# Header1'))
 	response.set_cookie('username', '')
 	return response
 

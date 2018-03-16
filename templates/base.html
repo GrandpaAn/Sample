@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block head %}
+	<meta charset="utf-8">
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}">
+{% endblock %}
+</head>
+<body>
+<header>{% block header %}{% endblock %}</header>
+<div>{% block content %}{% endblock %}</div>
+{% for item in items %}
+	<li>{% block loop_item %}{% endblock %}</li>
+{% endfor %}
+<footer>
+	{% block footer %}
+		Copyright 2018 by <a href="grandpaan.github.io">Grandpa An</a>
+	{% endblock %}
+</footer>
+</body>
+</html>
