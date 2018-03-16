@@ -65,7 +65,7 @@ def page_not_found(error):
 
 @app.template_test('current_link')
 def is_current_link(link):
-	return link == request.path
+	return link['href'] == request.path
 
 # @manager.command 
 # def dev():
