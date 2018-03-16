@@ -15,19 +15,24 @@
 
 
 {% set links=[
-	{'label':'Home', 'href':url_for('.index')},
-	{'label':'About', 'href':url_for('.about')},
-	{'label':'Serivce', 'href':url_for('.serivce')},
-	{'label':'Project', 'href':url_for('.projects')}
+	('Home', url_for('.index')),
+	('About', url_for('.about')),
+	('Serivce', url_for('.serivce')),
+	('Project', url_for('.projects'))
 ] %}
 
 
 <nav>
-	{% for link in links %}
+	{% for label,href in links %}
 		{% if not loop.first %} | {% endif %}
-		{% if link is current_link %}
-			<a href="{{ link.href }}">{{ link.label }}</a>
-		{% endif %}
+			<a href="
+					{% if href is current_link %} 
+						# 
+					{% else %}
+						{{ href }} 
+					{% endif %}">
+			{{ label }}</a>
+		
 	{% endfor %}
 </nav> 
 
