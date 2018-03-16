@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-{% block head %}
-	<meta charset="utf-8">
-	<title>{% block title %}{% endblock %}</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}">
-{% endblock %}
+	{% block head %}
+		{% include ['includes/_head.html', 'includes/_metas.html'] %}
+	{% endblock head %}
 </head>
 <body>
 <header>{% block header %}{% endblock %}</header>
