@@ -9,14 +9,32 @@
 <!-- {% autoescape false %}
 	{{ title }}
 {% endautoescape %} -->
-{{ title|safe }}
-{{ body|md|safe }}
-{{ read_md('test.md')|md|safe}}
+<!-- {# {{ title|safe }} #}
+{#  {{ body|md|safe }} #}
+{# {{ read_md('test.md')|md|safe}} #} -->
+
+
+{% set links=[
+	('Home', url_for('.index')),
+	('About', url_for('.about')),
+	('Serivce', url_for('.serivce')),
+	('Project', url_for('.projects'))
+] %}
+
+
 <nav>
-	<a href="{{ url_for('.serivce') }}">Serivce</a>
-	<a href="{{ url_for('.about') }}">About</a>
-	<a href="{{ url_for('.projects') }}">projects</a>
-</nav>
+	{% for label,href in links %}
+		{% if not loop.first %} | {% endif %}
+			<a href="
+					{% if href is current_link %} 
+						# 
+					{% else %}
+						{{ href }} 
+					{% endif %}">
+			{{ label }}</a>
+		
+	{% endfor %}
+</nav> 
 
 </body>
 </html>
