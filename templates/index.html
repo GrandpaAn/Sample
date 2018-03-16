@@ -3,12 +3,6 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-	{% set links=[
-		('Home', url_for('.index')),
-		('About', url_for('.about')),
-		('Serivce', url_for('.serivce')),
-		('Project', url_for('.projects'))
-	] %}
 
 	<nav>
 		{% for label,href in links %}
@@ -25,7 +19,7 @@
 	</nav>
 		<h1>{{ self.title() }}</h1>
 		{{ ui.input('username') }}
-		{{ ui.input('password',type="password") }}
+		{{ ui.input('password', type="password") }}
 {% endblock content %}
 
 {% block footer %}

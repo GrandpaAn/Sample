@@ -1,20 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-	{% block head %}
-		{% include ['includes/_head.html', 'includes/_metas.html'] %}
-	{% endblock head %}
-</head>
-<body>
-<header>{% block header %}{% endblock %}</header>
-<div>{% block content %}{% endblock %}</div>
-{% for item in items %}
-	<li>{% block loop_item %}{% endblock %}</li>
-{% endfor %}
-<footer>
-	{% block footer %}
+{% extends 'bootstrap/base.html' %}
+
+{% block head %}
+	{{ super() }}
+	{% include ['includes/_head.html', 'includes/_metas.html'] %}
+{% endblock head %}
+
+{% block styles %}
+	{{ super() }}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/lux/bootstrap.min.css">
+{% endblock styles %}
+
+{% block navbar %}
+	{{ nav.top.render() }}
+{% endblock %}
+
+{% block content %}
+	<header>{% block header %}{% endblock %}</header>
+	{% for item in items %}
+		<li>{% block loop_item %}{% endblock %}</li>
+	{% endfor %}
+{% endblock %}
+
+{% block footer %}
+	<footer>
 		Copyright 2018 by <a href="grandpaan.github.io">Grandpa An</a>
-	{% endblock %}
-</footer>
-</body>
-</html>
+	</footer>
+{% endblock %}
+

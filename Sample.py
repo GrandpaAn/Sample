@@ -1,10 +1,14 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, make_response, abort
 from werkzeug.routing import BaseConverter
 from werkzeug.utils import secure_filename
-from flask.ext.script import Manager
+from flask_script import Manager
 from os import path
 from livereload import Server
+from flask_bootstrap import Bootstrap
+from flask_nav import Nav
+from flask_nav.elements import *
+
 
 class RegexConverter(object):
 	"""docstring for RegexConverter"""
@@ -14,8 +18,17 @@ class RegexConverter(object):
 
 app = Flask(__name__)
 app.url_map.converters['regex'] = RegexConverter
-
+Bootstrap(app)
+nav = Nav()
 manager = Manager(app)
+
+nav.register_element('top', Navbar("Grandpaan's Blog",
+									View('Home', 'index'),
+									View('About', 'about'),
+									View('Serivce', 'serivce'),
+									View('Project', 'projects'),
+									))
+nav.init_app(app)
 
 @app.route('/')
 def index():
@@ -91,6 +104,7 @@ def inject_methods():
 if __name__ == '__main__':
 	# app.run(debug=True)
 	# manager.run()
+
 	live_server = Server(app.wsgi_app)
 	live_server.watch('**/*.*')
 	live_server.serve(open_url=True)

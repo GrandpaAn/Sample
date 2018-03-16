@@ -1,0 +1,6 @@
+	{% set links=[
+		('Home', url_for('.index')),
+		('About', url_for('.about')),
+		('Serivce', url_for('.serivce')),
+		('Project', url_for('.projects'))
+	] %}
