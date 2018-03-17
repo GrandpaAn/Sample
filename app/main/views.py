@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from flask import render_template, request, redirect, url_for, flash, make_response
+from flask import render_template, request, redirect, url_for, make_response, abort, flash
 from flask_login import login_required, current_user, login_user, logout_user
 from forms import LoginForm
 from . import main
@@ -49,9 +49,7 @@ def upload():
 def page_not_found(error):
 	return render_template('404.html')
 
-@main.template_test('current_link')
-def is_current_link(link):
-	return link == request.path
+
 
 	# @app.template_filter('md')
 	# def markdown_to_html(txt):

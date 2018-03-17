@@ -1,10 +1,11 @@
 # coding: utf-8
-from . import db
+from . import db, login_manager
+from flask_login import UserMixin# ,AnonymousUserMixin
 
 class Role(db.Model):
 	__tablename__ = 'roles'
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String, nullable=True)
+	name = db.Column(db.String)
 	users = db.relationship('User', backref='role')
 
 	@staticmethod
@@ -12,19 +13,20 @@ class Role(db.Model):
 		db.session.add_all(map(lambda r: Role(name=r), ['Guests', 'Administrators']))
 		db.session.commit()
 
-class User(db.Model):
+class User(UserMixin, db.Model):
 	__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String, nullable=True)
-	password = db.Column(db.String, nullable=True)
+	name = db.Column(db.String)
+	email = db.Column(db.String)
+	password = db.Column(db.String)
 	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
 	@staticmethod
 	def on_created(target, value, oldvalue, initiator):
 		target.role = Role.query.filter_by(name='Guests').first()
 
-db.event.listen(User.name, 'set', User.on_created)
-
 @login_manager.user_loader
-def get_user(user_id):
-	return User.query.filter_by(name=user_id),first()
+def load_user(user_id):
+	return User.query.get(int(user_id))
+
+db.event.listen(User.name, 'set', User.on_created)

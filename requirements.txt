@@ -12,3 +12,4 @@ wsgiref==0.1.2
 flask-Nav==0.6
 flask-wtf==0.14.2
 flask-sqlalchemy==2.3.2
+flask-login==0.2.11
