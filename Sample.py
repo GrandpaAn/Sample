@@ -8,7 +8,7 @@ from os import path
 from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import *
-
+from flask_sqlalchemy import SQLAlchemy
 
 class RegexConverter(object):
 	"""docstring for RegexConverter"""
@@ -16,12 +16,19 @@ class RegexConverter(object):
 		super(RegexConverter,self).__init__()
 		self.regex=items[0]
 
+
+basedir = path.abspath(path.dirname(__file__))
 app = Flask(__name__)
 app.url_map.converters['regex'] = RegexConverter
 Bootstrap(app)
 nav = Nav()
 
 app.config.from_pyfile('config')
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+	'sqlite:///' + path.join(basedir, 'data.sqlite')
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+db = SQLAlchemy(app)
+
 manager = Manager(app)
 
 nav.register_element('top', Navbar("Grandpaan's Blog",
@@ -110,6 +117,19 @@ def read_md(filename):
 @app.context_processor
 def inject_methods():
 	return dict(read_md = read_md)
+
+class Role(db.Model):
+	__tablename__ = 'roles'
+	id = db.Column(db.Integer, primany_key=True)
+	name = db.Column(db.String, nullable=True)
+	users = db.relationship('User', bachref='roles')
+
+class User(db.Model):
+	__tablename__ = 'users'
+	id = db.Column(db.Integer, primany_key=True)
+	name = db.Column(db.String, nullable=True)
+	password = db.Column(db.String, nullable=True)
+	role_id = db.Column(db.Integer, db.Foreignkey('roles.id'))
 
 if __name__ == '__main__':
 	# app.run(debug=True)
