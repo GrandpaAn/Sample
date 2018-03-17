@@ -4,3 +4,16 @@
 		('Serivce', url_for('.serivce')),
 		('Project', url_for('.projects'))
 	] %}
+
+	<nav>
+		{% for label,href in links %}
+			{% if not loop.first %} | {% endif %}
+				<a href="
+						{% if href is current_link %} 
+							# 
+						{% else %}
+							{{ href }} 
+						{% endif %}">
+				{{ label }}</a>
+		{% endfor %}
+	</nav>

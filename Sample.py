@@ -26,7 +26,12 @@ nav.register_element('top', Navbar("Grandpaan's Blog",
 									View('Home', 'index'),
 									View('About', 'about'),
 									View('Serivce', 'serivce'),
-									View('Project', 'projects'),
+									Subgroup('Project',
+										View('Project1', 'projects'),
+										Separator(),
+										View('Project2', 'projects'),
+										)
+
 									))
 nav.init_app(app)
 
