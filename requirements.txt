@@ -9,3 +9,5 @@ MarkupSafe==1.0
 Werkzeug==0.14.1
 Markdown==2.3.1
 wsgiref==0.1.2
+flask-Nav==0.6
+flask-wtf==0.14.2

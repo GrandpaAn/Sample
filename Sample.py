@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, request, redirect, url_for, make_response, abort
+from flask import Flask, render_template, request, redirect, url_for, make_response, abort, flash
 from werkzeug.routing import BaseConverter
 from werkzeug.utils import secure_filename
 from flask_script import Manager
 from os import path
-from livereload import Server
+
 from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import *
@@ -20,6 +20,8 @@ app = Flask(__name__)
 app.url_map.converters['regex'] = RegexConverter
 Bootstrap(app)
 nav = Nav()
+
+app.config.from_pyfile('config')
 manager = Manager(app)
 
 nav.register_element('top', Navbar("Grandpaan's Blog",
@@ -60,12 +62,15 @@ def projects():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method == 'POST':
-		username = request.form['username']
-		password = request.form['password']
-	else:
-		username = request.args['username']
-	return render_template('login.html', method=request.method)
+	from forms import LoginForm
+	form = LoginForm()
+	flash(u'登录成功')
+	return render_template('login.html',title=u'用户登录', form=form) # method=request.method
+	# if request.method == 'POST':
+	# 	username = request.form['username']
+	# 	password = request.form['password']
+	# else:
+	# 	username = request.args['username']
 
 @app.route('/upload', methods=['GET','POST'])
 def upload():
@@ -85,12 +90,12 @@ def page_not_found(error):
 def is_current_link(link):
 	return link == request.path
 
-# @manager.command 
-# def dev():
-	
-	# live_server = Server(app.wsgi_app)
-	# live_server.watch('**/*.*')
-	# live_server.serve(open_url=True)
+@manager.command 
+def dev():
+	from livereload import Server
+	live_server = Server(app.wsgi_app)
+	live_server.watch('**/*.*')
+	live_server.serve(open_url=True)
 
 @app.template_filter('md')
 def markdown_to_html(txt):
@@ -109,7 +114,7 @@ def inject_methods():
 if __name__ == '__main__':
 	# app.run(debug=True)
 	# manager.run()
-
-	live_server = Server(app.wsgi_app)
-	live_server.watch('**/*.*')
-	live_server.serve(open_url=True)
+	dev()
+	# live_server = Server(app.wsgi_app)
+	# live_server.watch('**/*.*')
+	# live_server.serve(open_url=True)
