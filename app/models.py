@@ -23,4 +23,8 @@ class User(db.Model):
 	def on_created(target, value, oldvalue, initiator):
 		target.role = Role.query.filter_by(name='Guests').first()
 
-db.event.listen(User.name, 'append', User.on_created)
+db.event.listen(User.name, 'set', User.on_created)
+
+@login_manager.user_loader
+def get_user(user_id):
+	return User.query.filter_by(name=user_id),first()

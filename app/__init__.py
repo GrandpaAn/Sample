@@ -43,4 +43,11 @@ def create_app():
 	bootstrap.init_app(app)
 	nav.init_app(app)
 	init_views(app)
+
+	from auth import auth as auth_blueprint
+	from main import main as main_blueprint
+
+	app.register_blueprint(auth_blueprint, url_prefix='/auth')
+	app.register_blueprint(main_blueprint, static_folder='static')
+ 
 	return app
