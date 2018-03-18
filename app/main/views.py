@@ -1,9 +1,11 @@
 # -*- coding:utf-8 -*-
 from flask import render_template, request, redirect, url_for, make_response, abort, flash
 from flask_login import login_required, current_user, login_user, logout_user
-from forms import LoginForm
+# from forms import LoginForm
 from . import main
-
+from .. import db
+from ..models import Post, Comment
+from .forms import CommentForm, PostForm
 
 @main.route('/')
 def index():
@@ -17,11 +19,11 @@ def serivce():
 
 @main.route('/about')
 def about():
-	return 'About'
+	return render_template('about.html', title='About me')
 	#路由
-	# @app.route('/user/<regex("[a-z]{3}"):user_id>')
-	# def user(user_id):
-	# 	return 'User %s' % user_id
+# @main.route('/user/<regex("[a-z]{3}"):user_id>')
+# def user(user_id):
+# 	return 'User %s' % user_id
 
 @main.route('/admin')
 @login_required
@@ -49,7 +51,48 @@ def upload():
 def page_not_found(error):
 	return render_template('404.html')
 
+@main.route('/posts/<int:id>', methods=['GET', 'POST'])
+def post(id):
+	post = Post.query.get_or_404(id)
+	# 评论窗体
+	form = CommentForm()
+	# 保存评论
+	if form.validate_on_submit():
+		comment = Comment(body = form.body.data, post = post)
+		db.session.add(comment)
+		db.session.comment()
 
+	return render_template('post/detail.html',
+							title=post.title,
+							form=form,
+							post=post)
+
+@main.route('/edit')
+@main.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit(id=0):
+	post = None
+	form = PostForm(author=current_user)
+
+	if id == 0:
+		post = Post()
+	else:
+		post = Post.query.get_or_404(id)
+
+	if form.validate_on_submit():
+		post.body = form.body.data
+		post.title = form.title.data
+
+		db.session.add(post)
+		db.session.comment()
+
+	mode = u'添加'
+	if id>0:
+		mode = u'编辑'
+	return render_template('posts/edit.html',
+							title=u'title -- %s' % post.title,
+							form=form,
+							post=post)
 
 	# @app.template_filter('md')
 	# def markdown_to_html(txt):

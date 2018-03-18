@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block body %}
+	<div class="container">
+		<span>作者:{{ post.author.name }}</span> <span>发表日期:{{ post.created }}</span>
+		<hr>
+		{# 正文 #}
+		<div>
+			{{ post.body_html | safe }}
+		</div>
+
+		{# 操作链接 #}
+		<h3>评论</h3>
+		{# 评论发表 #}
+
+		<div>
+			{{ wtf.quick_form(form) }}
+		</div>
+		{# 评论列表 #}
+		{% for commit in post.comments|sort(attribute='created',reverse=True) %}
+		<div class="media">
+
+			<!-- <div class="media-left">
+				<a href="#">
+					<img class="media-object" alt="" src="">
+				</a>
+			</div> -->
+			<div class="media-body">
+				{{ comment.body }}
+			</div>
+
+		</div>
+	</div>
+{% endblock %}
