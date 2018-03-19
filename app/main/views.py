@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 from flask import render_template, request, redirect, url_for, make_response, abort, flash
 from flask_login import login_required, current_user, login_user, logout_user
-# from forms import LoginForm
 from . import main
 from .. import db
 from ..models import Post, Comment
@@ -9,9 +8,10 @@ from .forms import CommentForm, PostForm
 
 @main.route('/')
 def index():
-	response = make_response(render_template('index.html', title="Welcome to Grandpaan's Home", body='# Header1'))
-	response.set_cookie('username', '')
-	return response
+	# response = make_response(render_template('index.html', title="Welcome to Grandpaan's Blog", body='# Header1'))
+	# response.set_cookie('username', '')
+	return render_template('index.html', 
+							title=u"Welcome to Grandpaan's Blog") #
 
 @main.route('/serivce')
 def serivce():
@@ -19,7 +19,7 @@ def serivce():
 
 @main.route('/about')
 def about():
-	return render_template('about.html', title='About me')
+	return render_template('about.html')
 	#路由
 # @main.route('/user/<regex("[a-z]{3}"):user_id>')
 # def user(user_id):
@@ -58,11 +58,11 @@ def post(id):
 	form = CommentForm()
 	# 保存评论
 	if form.validate_on_submit():
-		comment = Comment(body = form.body.data, post = post)
+		comment = Comment(author = current_user, body = form.body.data, post = post)
 		db.session.add(comment)
 		db.session.comment()
 
-	return render_template('post/detail.html',
+	return render_template('posts/detail.html',
 							title=post.title,
 							form=form,
 							post=post)
@@ -71,11 +71,11 @@ def post(id):
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id=0):
-	post = None
-	form = PostForm(author=current_user)
+	# post = None
+	form = PostForm()
 
 	if id == 0:
-		post = Post()
+		post = Post(author=current_user)
 	else:
 		post = Post.query.get_or_404(id)
 

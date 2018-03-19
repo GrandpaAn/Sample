@@ -45,7 +45,7 @@ class Post(db.Model):
 	commment = db.relationship('Comment', backref='post')
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	@staticmethod
-	def on_body_changed():
+	def on_body_changed(target, value, oldvalue, initiator):
 		if value is None or (value is ''):
 			target.body_html = ''
 		else:
