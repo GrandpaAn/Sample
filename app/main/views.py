@@ -15,11 +15,13 @@ def index():
 
 @main.route('/serivce')
 def serivce():
-	return 'Serivce'
+	return render_template('service.html',
+							title="Serivce")
 
 @main.route('/about')
 def about():
-	return render_template('about.html')
+	return render_template('about.html',
+							title="About me")
 	#路由
 # @main.route('/user/<regex("[a-z]{3}"):user_id>')
 # def user(user_id):

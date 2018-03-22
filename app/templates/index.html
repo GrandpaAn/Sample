@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 	<div class="page-header">
 		<div class="container">
-			<h1>Welcome to Grandpaan's Blog</h1>
+			<h1>{{ self.title()}}</h1>
 		</div>	
 	</div>
 	<div class="container">
@@ -17,7 +18,7 @@
 {% block footer %}
 	<hr>
 	{{ super() }}
-{% endblock  %}
+{% endblock %}
 
 <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}"> -->
 

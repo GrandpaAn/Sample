@@ -7,8 +7,9 @@ from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import *
 from flask_sqlalchemy import SQLAlchemy
-from .views import init_views
+# from .views import init_views
 from flask_login import LoginManager
+from flask_pagedown import PageDown
 
 class RegexConverter(object):
 	"""docstring for RegexConverter"""
@@ -45,7 +46,7 @@ def create_app():
 	bootstrap.init_app(app)
 	login_manager.init_app(app)
 	nav.init_app(app)
-	init_views(app)
+	# init_views(app)
 
 	from auth import auth as auth_blueprint
 	from main import main as main_blueprint
