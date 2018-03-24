@@ -24,6 +24,7 @@ class User(UserMixin, db.Model):
 	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
 	posts = db.relationship('Post', backref='author')
+	comments = db.relationship('Comment', backref='author')
 	@staticmethod
 	def on_created(target, value, oldvalue, initiator):
 		target.role = Role.query.filter_by(name='Guests').first()
@@ -42,7 +43,7 @@ class Post(db.Model):
 	body_html = db.Column(db.String)
 	created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-	commment = db.relationship('Comment', backref='post')
+	comments = db.relationship('Comment', backref='post')
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	@staticmethod
 	def on_body_changed(target, value, oldvalue, initiator):
@@ -59,4 +60,5 @@ class Comment(db.Model):
 	body = db.Column(db.String)
 	created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 		 

@@ -7,10 +7,31 @@
 {% endblock %}
 
 {% block body %}
+	{% block navbar %}
+		{# {{ nav.top.render() }} #}
+		{% include 'includes/_navbar.html' %}
+	{% endblock %}
+	<div class="page-header">
 		<div class="container">
-			<div>
-				{{ wtf.quick_form(form) }}
-			</div>
+			<h1>添加新文章</h1>
+		</div>	
+	</div>
+		<div class="container">
+			<form method ="POST">
+				{{ form.hidden_tag() }}
+				<div class="form-group">
+					{{ form.title(class="form-control", placeholder="请输入文章标题") }}
+				</div>
+				<div class="form-group">
+					{{ form.body(only_input=true, rows=10, class="form-control") }}
+				</div>
+				<div class="form-group">
+					{{ form.submit(class="btn btn-primary") }}
+				</div>
+				<div style="width:300px; height:200px">
+					{{ form.body(only_preview=True) }}
+				</div>
+			</form>
 		</div>
 {% endblock %}
 

@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 # from .views import init_views
 from flask_login import LoginManager
 from flask_pagedown import PageDown
+from flask_gravatar import Gravatar
 
 class RegexConverter(object):
 	"""docstring for RegexConverter"""
@@ -46,6 +47,7 @@ def create_app():
 	bootstrap.init_app(app)
 	login_manager.init_app(app)
 	nav.init_app(app)
+	Gravatar(app, size=64)
 	# init_views(app)
 
 	from auth import auth as auth_blueprint

@@ -1,10 +1,21 @@
 {% extends 'base.html' %}
-{% import 'bootstrap/wtf.html' as wtf %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+	{% block navbar %}
+		{# {{ nav.top.render() }} #}
+		{% include 'includes/_navbar.html' %}
+	{% endblock %}
+
 	<div class="container">
-		<span>作者:{{ post.author.name }}</span> <span>发表日期:{{ post.created }}</span>
+		<h1>{{ post.title }}</h1>
 		<hr>
+		{# Meta 信息 #}
+		<span>作者:{{ post.author.name }}</span> <span>{{ ("发表日期") }}:{{ post.created }}</span>
+		<br/>
+		<br/>
+		<br/>
+
 		{# 正文 #}
 		<div>
 			{{ post.body_html | safe }}
@@ -12,24 +23,32 @@
 
 		{# 操作链接 #}
 		<h3>评论</h3>
-		{# 评论发表 #}
-
+		{# 发表评论 #}
 		<div>
 			{{ wtf.quick_form(form) }}
 		</div>
+
 		{# 评论列表 #}
-		{% for commit in post.comments|sort(attribute='created',reverse=True) %}
-		<div class="media">
+		{% for comment in post.comments|sort(attribute='created',reverse=True ) %}
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+                        <img class="media-object img-circle" src="img/timg.jpg" alt="头像">
+                    </a>
+				</div>
+				<div class="media-body">
+					<small class="text-muted">{{ comment.created }}</small>
+					<div>{{ comment.body }}</div>
 
-			<!-- <div class="media-left">
-				<a href="#">
-					<img class="media-object" alt="" src="">
-				</a>
-			</div> -->
-			<div class="media-body">
-				{{ comment.body }}
+				</div>
 			</div>
-
-		</div>
+		{% endfor %}
 	</div>
+
+{% block footer %}
+    <hr>
+    {{ super() }}
 {% endblock %}
+
+{% endblock %}
+

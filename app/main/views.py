@@ -1,10 +1,12 @@
 # -*- coding:utf-8 -*-
-from flask import render_template, request, redirect, url_for, make_response, abort, flash
+from flask import Flask, render_template, request, redirect, url_for, make_response, abort, flash#, send_static_file
 from flask_login import login_required, current_user, login_user, logout_user
 from . import main
 from .. import db
 from ..models import Post, Comment
 from .forms import CommentForm, PostForm
+
+
 
 @main.route('/')
 def index():
@@ -44,7 +46,7 @@ def upload():
 		if request.method == 'POST':
 			f = request.files['file']
 			basepath = path.abspath(path.dirname(__file__))
-			upload_path = path.join(basepath, 'static/uploads', secure_filename(f.filename))
+			upload_path = path.join(basepath, 'static\uploads', secure_filename(f.filename))
 			f.save(upload_path)
 			return redirect(url_for('upload'))
 		return render_template('upload.html')
@@ -62,14 +64,14 @@ def post(id):
 	if form.validate_on_submit():
 		comment = Comment(author = current_user, body = form.body.data, post = post)
 		db.session.add(comment)
-		db.session.comment()
+		db.session.commit()
 
 	return render_template('posts/detail.html',
 							title=post.title,
 							form=form,
 							post=post)
 
-@main.route('/edit')
+@main.route('/edit', methods=['GET', 'POST'])
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id=0):
@@ -86,13 +88,17 @@ def edit(id=0):
 		post.title = form.title.data
 
 		db.session.add(post)
-		db.session.comment()
+		db.session.commit()
+		return redirect(url_for('.post', id=post.id))
 
-	mode = u'添加'
-	if id>0:
-		mode = u'编辑'
+	form.title.data = post.title
+	form.body.data = post.body
+
+	title = u'添加新文章'
+	if id > 0:
+		title = u'编辑 - %' % post.title
 	return render_template('posts/edit.html',
-							title=u'title -- %s' % post.title,
+							title=title,
 							form=form,
 							post=post)
 
