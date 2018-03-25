@@ -7,10 +7,10 @@ from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import *
 from flask_sqlalchemy import SQLAlchemy
-# from .views import init_views
 from flask_login import LoginManager
 from flask_pagedown import PageDown
 from flask_gravatar import Gravatar
+from flask_babel import Babel, gettext as _
 
 class RegexConverter(object):
 	"""docstring for RegexConverter"""
@@ -26,16 +26,21 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 nav = Nav()
 db = SQLAlchemy()
+pagedown=PageDown()
+babel = Babel()
 
 def create_app():
 	app = Flask(__name__)
 	app.url_map.converters['regex'] = RegexConverter
-	app.config.from_pyfile('config')
+	# app.config.from_pyfile('config')
+	app.secure_key = 'you-will-never-guess'
+	app.config.from_pyfile('babel.cfg')
+	app.config['BABEL_DEFAULT_LOACLE'] = 'zh'
 	app.config['SQLALCHEMY_DATABASE_URI'] =\
 		'sqlite:///' + path.join(basedir, 'data.sqlite')
 	app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 	# nav.register_element('top', Navbar("Grandpaan's Blog",
-	# 								View('Home', 'index'),
+	# 								View('Home', 'index'), 
 	# 								View('About', 'about'),
 	# 								View('Serivce', 'serivce'),
 	# 								Subgroup('Project',
@@ -47,8 +52,10 @@ def create_app():
 	bootstrap.init_app(app)
 	login_manager.init_app(app)
 	nav.init_app(app)
+	pagedown.init_app(app)
+
+	babel.init_app(app)
 	Gravatar(app, size=64)
-	# init_views(app)
 
 	from auth import auth as auth_blueprint
 	from main import main as main_blueprint

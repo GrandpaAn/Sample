@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
 
 
 {% block title %}{{ title }}{% endblock %}
@@ -6,19 +7,37 @@
 {% block content %}
 	<div class="page-header">
 		<div class="container">
-			<h1>{{ self.title()}}</h1>
+			<h1>{{ self.title() }}</h1>
 		</div>	
 	</div>
 	<div class="container">
 		<a href="{{ url_for('main.edit') }}" class="btn btn-default">发表新文章</a>
 	</div>
-{% endblock content %}
-
+	<div class="container">
+	{% for post in posts %}
+		<h2><a href="{{ url_for('main.post', id = post.id) }}">{{ post.title }}</a></h2>
+		<div>
+			{{ post.body_html|safe }}
+		</div>
+	{% endfor %}
+	</div>
+	<div class="container">
+		{% if pagination %}
+			{{ render_pagination(pagination) }}
+		{% endif %}
+	</div>
 
 {% block footer %}
 	<hr>
 	{{ super() }}
+	<br/>
 {% endblock %}
+
+{% endblock content %}
+	
+
+
+
 
 <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}"> -->
 

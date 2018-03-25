@@ -16,7 +16,7 @@ def login():
 			return redirect(url_for('main.index'))
 
 	# flash(u'登录成功')
-	return render_template('login.html',title=u'用户登录', form=form) # method=request.method
+	return render_template('login.html',title=_(u'用户登录'), form=form) # method=request.method
 
 @auth.route('/logout')
 def logout():
@@ -38,5 +38,5 @@ def register():
 		return redirect(url_for('auth.login'))
 
 	return render_template('register.html',
-							title=u'用户注册',
+							title=_(u'用户注册'),
 							form=form)

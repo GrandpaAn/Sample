@@ -5,15 +5,25 @@ from . import main
 from .. import db
 from ..models import Post, Comment
 from .forms import CommentForm, PostForm
-
-
+from flask_babel import gettext as _
 
 @main.route('/')
 def index():
 	# response = make_response(render_template('index.html', title="Welcome to Grandpaan's Blog", body='# Header1'))
 	# response.set_cookie('username', '')
+	# posts = Post.query.all()
+	# print posts
+	page_index = request.args.get('page', 1, type=int)
+
+	query = Post.query.order_by(Post.created.desc())
+
+	pagination = query.paginate(page_index, per_page=20, error_out=False)
+
+	posts = pagination.items	
 	return render_template('index.html', 
-							title=u"Welcome to Grandpaan's Blog") #
+							title=_(u"Welcome to Grandpaan's Blog"),
+							posts=posts,
+							pagination=pagination)
 
 @main.route('/serivce')
 def serivce():
@@ -38,8 +48,6 @@ def admin():
 @main.route('/project-page/')
 def projects():
 	return 'The project page'
-
-
 
 @main.route('/upload', methods=['GET','POST'])
 def upload():
@@ -94,9 +102,10 @@ def edit(id=0):
 	form.title.data = post.title
 	form.body.data = post.body
 
-	title = u'添加新文章'
+	title = _(u'添加新文章')
 	if id > 0:
-		title = u'编辑 - %' % post.title
+		title = _(u'编辑 - %(title)', title=post.title)
+
 	return render_template('posts/edit.html',
 							title=title,
 							form=form,
