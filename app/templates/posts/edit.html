@@ -6,11 +6,8 @@
 	{{ pagedown.include_pagedown() }}
 {% endblock %}
 
-{% block body %}
-	{% block navbar %}
-		{# {{ nav.top.render() }} #}
-		{% include 'includes/_navbar.html' %}
-	{% endblock %}
+{% block content %}
+
 	<div class="page-header">
 		<div class="container">
 			<h1>添加新文章</h1>

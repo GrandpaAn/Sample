@@ -5,6 +5,8 @@ from .forms import LoginForm, RegistrationForm
 from ..models import User
 from .. import db
 from flask_login import login_user, logout_user, current_user
+from flask_babel import gettext as _
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -22,7 +24,7 @@ def login():
 def logout():
 	if current_user.is_authenticated():
 		logout_user()
-	return redirect('login')
+	return redirect(url_for('auth.login'))
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():

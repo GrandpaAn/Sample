@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from flask import Flask, render_template, request, redirect, url_for, make_response, abort, flash#, send_static_file
+from flask import Flask, render_template, request, redirect, url_for, make_response, abort, flash, current_app#, send_static_file
 from flask_login import login_required, current_user, login_user, logout_user
 from . import main
 from .. import db
@@ -21,7 +21,7 @@ def index():
 
 	posts = pagination.items	
 	return render_template('index.html', 
-							title=_(u"Welcome to Grandpaan's Blog"),
+							title=u"Welcome to Grandpaan's Blog",
 							posts=posts,
 							pagination=pagination)
 
@@ -111,6 +111,17 @@ def edit(id=0):
 							form=form,
 							post=post)
 
+# @main.route('/shutdown')
+# def shutdown():
+# 	if not current_app.testing:
+# 		abort(404)
+
+# 	shutdown = request.environ.get('werkzeug,server.shutdown')
+# 	if not shutdown:
+# 		abort(500)
+
+# 	shutdown()
+# 	return u'正在关闭服务器端进程......'
 	# @app.template_filter('md')
 	# def markdown_to_html(txt):
 	# 	from markdown import markdown

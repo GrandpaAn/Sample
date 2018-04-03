@@ -17,8 +17,11 @@ def dev():
 	live_server.watch('**/*.*')
 	live_server.serve(open_url=True)
 
+@manager.command
 def test():
-	pass
+	import unittest
+	tests = unittest.TestLoader().discover('tests')
+	unittest.TextTestRunner(verbosity=2).run(tests)
 
 @manager.command
 def deploy():
