@@ -111,6 +111,11 @@ def edit(id=0):
 							form=form,
 							post=post)
 
+@main.route('/user')
+@login_required
+def user():
+	return render_template('user.html')
+
 # @main.route('/shutdown')
 # def shutdown():
 # 	if not current_app.testing:

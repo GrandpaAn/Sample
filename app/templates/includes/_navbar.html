@@ -26,15 +26,37 @@
                     <a href="{{ url_for('main.serivce') }}" title="Serivce" >Serivce</a>
                 </li>
                 <li {% if url_for('main.projects') is current_link %} class="active" {% endif %}>
-                    <a href="{{ url_for('main.projects') }}" title="Projects" >Projects</a>
+                    <a href="{{ url_for('main.projects') }}"  class="dropdown-toggle" data-toggle="dropdown" title="Projects" >
+                        Projects<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Project1</a></li>
+                            <li><a href="#">Project2</a></li>
+                            <li><a href="#">Project3</a></li>
+                        </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated() %}
-                    <li><a href="#">{{ current_user.name }}</a></li>
-                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {{ current_user.name }}<span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('main.user') }}">个人资料</a></li>
+                            <li><a href="#">帖子管理</a></li>
+                            <li><a href="#">密码修改</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('auth.logout') }}">Logout</a>
+                        
+                    </li>
                 {% else %}
-                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    <li>
+                        <a href="{{ url_for('auth.login') }}">Login</a>
+                        
+                    </li>
                     <li><a href="{{ url_for('auth.register') }}">Register</a></li>
                 {% endif %}
             </ul>
